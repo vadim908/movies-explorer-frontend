@@ -1,0 +1,50 @@
+.subLoading {
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+}
+
+.subLoading__button {
+    background-color: white;
+    border-radius: 5px;
+    margin-top: 50px;
+    margin-bottom: 80px;
+    width: calc(100% - 960px);
+    border: 1px solid #E8E8E8;
+    padding-top: 11px;
+    padding-bottom: 9px;
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+}
+
+.subLoading__button:hover{
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px){
+    
+    .subLoading {
+        padding-top: 20px;
+    }
+    
+    .subLoading__button {
+        width: calc(100% - 80px);
+
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px){
+    
+    .subLoading {
+        padding-top: 30px;
+    }
+    
+    .subLoading__button {
+        width: calc(100% - 448px);
+
+    }
+}

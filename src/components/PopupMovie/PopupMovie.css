@@ -1,0 +1,116 @@
+@media screen and (min-width: 768px) and (max-width: 1023px){
+    
+    .popup-movie{
+        position: fixed;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+        display: flex;
+        opacity: 1;
+        visibility: visible;
+        transition: visibility .5s, opacity .5s;
+    }
+    
+    .popup-movie__container {
+        min-width: 520px;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        align-items: center;
+    }
+    
+    .popup-movie__img {
+        position: absolute;
+        right: 22.44px;
+        top: 22.44px;
+    }
+    
+    .popup-movie__links {
+        padding-top: 159px;
+        padding-bottom: 356px;
+    }
+    
+    .popup-movie__link {
+        color:black;
+        text-decoration: none;
+    }
+    
+    .popup-movie__text {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 22px;
+        text-align: center;
+        padding-bottom: 28px;
+    }
+    
+    .popup-movie__link_active {
+        text-decoration: underline;
+    }
+    
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px){
+    
+    .popup-movie{
+        position: fixed;
+        z-index: 1;
+        background-color: rgba(0, 0, 0, 0.5);
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        opacity: 1;
+        visibility: visible;
+        transition: visibility .5s, opacity .5s;
+    }
+    
+    .popup-movie__container {
+        width: 100vw;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        align-items: center;
+    }
+    
+    .popup-movie__img {
+        position: absolute;
+        right: 22.44px;
+        top: 22.44px;
+    }
+    
+    .popup-movie__links {
+        padding-top: 159px;
+        padding-bottom: 356px;
+    }
+    
+    .popup-movie__link {
+        color:black;
+        text-decoration: none;
+    }
+    
+    .popup-movie__text {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 22px;
+        text-align: center;
+        padding-bottom: 28px;
+    }
+    
+    .popup-movie__link_active {
+        text-decoration: underline;
+    }
+}

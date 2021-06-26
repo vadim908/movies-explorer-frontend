@@ -1,0 +1,130 @@
+.footer {
+    background-color: #FAFAFA;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: auto;
+}
+
+.footer__title {
+    width: calc(100% - 140px);
+    padding-top: 79px;
+    padding-bottom: 20px;
+    margin: auto;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 16px;
+    text-align: center;
+    color: #A0A0A0;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.footer__container {
+    width: calc(100% - 140px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: auto;
+
+}
+
+.footer__links{
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(min-content, max-content));
+    column-gap: 20px;
+
+}
+
+.footer__nav{
+    justify-self: end;
+}
+
+.footer__link{
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 16px;
+    text-align: right;
+    text-decoration: none;
+    color: black;
+}
+
+.footer__link:hover{
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.footer__copyright {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 16px;
+    align-self: center;
+    grid-row: 1;
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px){
+    
+    .footer__title {
+        width: calc(100% - 20px);
+        font-size: 12px;
+        line-height: 15px;
+        padding-top: 79px;
+        padding-bottom: 21px;
+    }
+
+    .footer__link{
+        padding-bottom: 10px;
+    }
+
+    .footer__container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer__links{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer__link{
+        font-size: 12px;
+        line-height: 15px;
+        padding-bottom: 12px;
+    }
+    
+    .footer__copyright {
+        color: #A0A0A0;
+        padding-bottom: 10px;
+    }
+
+    .footer__nav{
+        justify-self: center;
+    }
+
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px){
+    
+    .footer__title {
+        width: calc(100% - 60px);
+        padding-top: 79px;
+        padding-bottom: 20px;
+    }
+
+    .footer__container {
+        width: calc(100% - 60px);
+    }
+
+    .footer__link{
+        padding-bottom: 20px;
+    }
+}

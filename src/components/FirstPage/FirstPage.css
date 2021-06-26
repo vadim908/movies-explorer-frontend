@@ -1,0 +1,22 @@
+.firstPage {
+    width: 100%;
+    background-color: #5C5C5C;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.firstPage__title{
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 50px;
+    line-height: 58px;
+    text-align: center;
+    letter-spacing: -0.04em;
+    width: 730px;
+    padding-top: 184px;
+    padding-bottom: 224px;
+    margin: auto;
+    color: white;
+}

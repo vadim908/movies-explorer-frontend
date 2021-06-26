@@ -1,0 +1,8 @@
+.savedMovies {
+    background-color: white;
+}
+
+.savedMovies__container {
+    width: 100%;
+    min-height: 140px;
+}
