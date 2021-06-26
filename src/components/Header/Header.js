@@ -8,8 +8,6 @@ function Header() {
 
   const history = useHistory();
 
-  const listItem = document.createElement('ProfileIcon');
-
   function Icon () {
     if(window.matchMedia('(max-width: 320px)')){
       return null;

@@ -75,6 +75,10 @@
     cursor: pointer;
 }
 
+.navigation__menu_disabled {
+    display: none;
+}
+
 .navigation__link-profile {
  grid-column: 4;
  text-decoration: none;

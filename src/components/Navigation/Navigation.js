@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink } from "react-router-dom";
 import { useHistory} from 'react-router-dom'; 
-import menu from '../../image/icon__COLOR_icon-menu.svg';
 
 function Navigation() {
 
@@ -33,12 +32,3 @@ function Navigation() {
 }
 
 export default Navigation;
-
-{/* <nav className="navigation">
-         <NavLink className="navigation__link" activeClassName="navigation__link_active" to="/sign-up">
-              <p>Регистрация</p>
-         </NavLink>
-         <NavLink className="navigation__link" activeClassName="navigation__link_active" to="/sign-in">
-            <p>Войти</p>
-         </NavLink>
-         </nav> */}
