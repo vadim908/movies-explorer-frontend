@@ -1,11 +1,11 @@
 import React from 'react';
 import Header from '../Header/Header';
 
-function Profile() {
+function Profile(props) {
 
   return (
     <section className="profile">
-      <Header/>
+      <Header onBurger={props.onBurger}/>
         <h1 className="profile__title">Привет, Вадим!</h1>
         <form className="profile__form">
             <div className="profile__container">

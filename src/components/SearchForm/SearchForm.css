@@ -4,8 +4,15 @@
     padding-bottom: 48px;
 }
 
+.search-form__form {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .searchForm__input{
-    font-family: "Inter";
+    font-family: "Inter",Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: 500;
     font-size: 28px;
@@ -31,7 +38,7 @@
     color: white;
     border: 0;
     margin-bottom: 13px;
-    font-family: "Inter";
+    font-family: "Inter",Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: 500;
     font-size: 11px;
@@ -65,7 +72,7 @@
   }
 
   .searchForm__switch{
-    font-family: "Inter";
+    font-family: "Inter",Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 13px;

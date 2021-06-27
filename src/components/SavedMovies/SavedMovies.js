@@ -4,10 +4,12 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 
-const SavedMovies = () => {
+const SavedMovies = (props) => {
     return (
         <section className="savedMovies">
-            <Header/>
+            <Header
+                onBurger={props.onBurger}
+            />
             <SearchForm/>
             <MoviesCardList/>
             <div className="savedMovies__container">

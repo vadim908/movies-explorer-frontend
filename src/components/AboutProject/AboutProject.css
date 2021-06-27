@@ -7,7 +7,7 @@
 
 .aboutProject__title{
     width: calc(100% - 140px);
-    font-family: "Inter";
+    font-family: "Inter",Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 22px;
@@ -45,7 +45,7 @@
 }
 
 .aboutProject__paragraph{
-    font-family: "Inter";
+    font-family: "Inter",Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
@@ -63,7 +63,7 @@
 }
 
 .aboutProject__ruler{
-    font-family: "Inter";
+    font-family: "Inter",Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
@@ -79,7 +79,7 @@
 }
 
 .aboutProject__signature{
-    font-family: "Inter";
+    font-family: "Inter",Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: 500;
     font-size: 14px;

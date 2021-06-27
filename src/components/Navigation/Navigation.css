@@ -6,7 +6,7 @@
 }
 .navigation__link{
     color: white;
-    font-family: "Inter";
+    font-family: "Inter",Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
@@ -28,7 +28,7 @@
     padding-right: 20px;
     border-radius: 3px;
     color: black;
-    font-family: "Inter";
+    font-family: "Inter",Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
@@ -43,7 +43,7 @@
 }
 
 .navigation__link-movies_active {
-    font-family: "Inter";
+    font-family: "Inter",Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: 500;
     font-size: 13px;
@@ -60,7 +60,7 @@
 }
 
 .navigation__link-movies {
-    font-family: "Inter";
+    font-family: "Inter",Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 13px;

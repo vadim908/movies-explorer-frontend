@@ -6,8 +6,30 @@ import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Profile from '../Profile/Profile'
 import { Route, Switch } from 'react-router-dom'; 
+import PopupMovie from '../PopupMovie/PopupMovie'
 
 function App() {
+
+  const [isBurgerPopupOpen, openBurgerPopupClick] = React.useState(false);
+  const [islike, likeClick] = React.useState(true); 
+
+  function handleBurgerClick(){ 
+    openBurgerPopupClick(true); 
+   }
+  
+   function handleLikeClick(){
+     if(islike === false){
+      likeClick(true);
+     }
+     else {
+      likeClick(false);
+     }
+   }
+
+   function closePopup(){
+    openBurgerPopupClick(false); 
+  } 
+
   return (
     <div className="root">
       <Switch>
@@ -15,10 +37,16 @@ function App() {
           <FirstPage />
         </Route>
         <Route path="/movies">
-          <Movies />
+          <Movies
+            onBurger={handleBurgerClick}
+            onLike={handleLikeClick}
+            isLike={islike}
+          />
         </Route>
         <Route path="/saved-movies">
-          <SavedMovies/>
+          <SavedMovies
+            onBurger={handleBurgerClick}
+          />
         </Route>
         <Route path="/sign-up">
           <Register/>
@@ -27,9 +55,10 @@ function App() {
           <Login/>
         </Route>
         <Route path="/profile">
-        <Profile/>
+        <Profile onBurger={handleBurgerClick}/>
         </Route>
       </Switch>
+      <PopupMovie isOpen={isBurgerPopupOpen} onClose= {closePopup}/>
     </div>
   );
 }

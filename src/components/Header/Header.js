@@ -4,19 +4,19 @@ import Navigation from '../Navigation/Navigation';
 import ProfileIcon from '../ProfileIcon/ProfileIcon'
 import { NavLink, useHistory } from "react-router-dom";
 
-function Header() {
+function Header(props) {
 
   const history = useHistory();
 
   function Icon () {
-    if(window.matchMedia('(max-width: 320px)')){
+    if(window.matchMedia('(max-width: 320px)').matches){
       return null;
     }
-    else if(window.matchMedia('(max-width: 768px)')){
+    else if(window.matchMedia('(max-width: 768px)').matches){
       return null;
     }
 
-    else if(window.matchMedia('(max-width: 1024px)')){
+    else if(window.matchMedia('(max-width: 1024px)').matches){
       return null;
     }
     else if(history.location.pathname === '/saved-movies'|| history.location.pathname === '/movies'|| history.location.pathname === '/profile'){
@@ -30,7 +30,9 @@ function Header() {
       <NavLink to="/" >
         <img src={logo} alt="Лого" className="header__logo" />
       </NavLink>
-        <Navigation/>
+        <Navigation
+          onBurger={props.onBurger}
+        />
         <Icon/>
     </header>
   );

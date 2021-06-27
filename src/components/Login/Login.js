@@ -8,7 +8,7 @@ function Login() {
     <section className="login">
         <div className="login__container">
           <Link to='/'>
-              <img src={logo}  alt="Лого" className="login__img"/>
+              <img src={logo} alt="Лого" className="login__img"/>
           </Link>
             <h1 className="login__title">Рады видеть!</h1>
         </div>

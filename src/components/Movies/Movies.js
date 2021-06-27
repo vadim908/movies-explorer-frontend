@@ -5,13 +5,18 @@ import SubLoading from '../SubLoading/SubLoading';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 
-function Movies() {
+function Movies(props) {
 
   return (
     <div className="movies">
-        <Header/>
+        <Header
+          onBurger={props.onBurger} 
+        />
         <SearchForm/>
-        <MoviesCardList/>
+        <MoviesCardList
+          onLike={props.onLike}
+          isLike={props.isLike}
+        />
         <SubLoading/>
         <Footer/>
     </div>

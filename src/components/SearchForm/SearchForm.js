@@ -15,8 +15,8 @@ function SearchForm() {
                 maxLength="40"
                 required
               />
+            <button className="searchForm__button" type="submit" >Найти</button>
             </form>
-            <input className="searchForm__button" type="button" value="Найти"/>
         </div>
 
         <div className="searchForm__side">

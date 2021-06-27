@@ -1,12 +1,12 @@
 import React from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard'
 
-function MoviesCardList() {
+function MoviesCardList(props) {
 
   return (
     <section className="moviesCardList">
-        <MoviesCard/>
-        <MoviesCard/>
+        <MoviesCard onLike={props.onLike} isLike={props.isLike}/>
+        <MoviesCard />
         <MoviesCard/>
         <MoviesCard/>
     </section>

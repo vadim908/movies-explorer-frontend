@@ -3,12 +3,12 @@ import { NavLink } from "react-router-dom";
 import back from '../../image/Group.svg'
 import ProfileIcon from '../ProfileIcon/ProfileIcon'
 
-function PopupMovie() {
+function PopupMovie(props) {
 
   return (
-    <div className="popup-movie">
+    <div className={`popup-movie ${props.isOpen ? 'popup-movie_opened' : ''}`}>
       <div className="popup-movie__container">
-        <img className="popup-movie__img" src={back} alt="Закрыть"/>
+        <img className="popup-movie__img" onClick={props.onClose} src={back} alt="Закрыть"/>
         <nav className="popup-movie__links">
           <NavLink className="popup-movie__link" activeClassName="popup-movie__link_active" exact to="/">
                 <p className="popup-movie__text" >Главная</p>
