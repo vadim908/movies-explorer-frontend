@@ -8,7 +8,7 @@ function Header(props) {
 
   const history = useHistory();
 
-  function Icon () {
+  const Icon = () => {
     if(window.matchMedia('(max-width: 320px)').matches){
       return null;
     }
@@ -21,11 +21,14 @@ function Header(props) {
     }
     else if(history.location.pathname === '/saved-movies'|| history.location.pathname === '/movies'|| history.location.pathname === '/profile'){
       return <ProfileIcon/>
+      
+    }
+    else {
+      return null;
     }
   }
 
   return (
-
     <header className="header">
       <NavLink to="/" >
         <img src={logo} alt="Лого" className="header__logo" />
