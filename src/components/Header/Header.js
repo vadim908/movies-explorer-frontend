@@ -2,31 +2,9 @@ import React from 'react';
 import logo from '../../image/logo.svg';
 import Navigation from '../Navigation/Navigation';
 import ProfileIcon from '../ProfileIcon/ProfileIcon'
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function Header(props) {
-
-  const history = useHistory();
-
-  const Icon = () => {
-    if(window.matchMedia('(max-width: 320px)').matches){
-      return null;
-    }
-    else if(window.matchMedia('(max-width: 768px)').matches){
-      return null;
-    }
-
-    else if(window.matchMedia('(max-width: 1024px)').matches){
-      return null;
-    }
-    else if(history.location.pathname === '/saved-movies'|| history.location.pathname === '/movies'|| history.location.pathname === '/profile'){
-      return <ProfileIcon/>
-      
-    }
-    else {
-      return null;
-    }
-  }
 
   return (
     <header className="header">
@@ -36,7 +14,10 @@ function Header(props) {
         <Navigation
           onBurger={props.onBurger}
         />
-        <Icon/>
+        <ProfileIcon
+        isOpen={props.isOpen}
+        />
+        
     </header>
   );
 }

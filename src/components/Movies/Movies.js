@@ -10,7 +10,9 @@ function Movies(props) {
   return (
     <div className="movies">
         <Header
-          onBurger={props.onBurger} 
+          onBurger={props.onBurger}
+          isOpen={props.isOpen}
+          icon={props.icon}
         />
         <SearchForm/>
         <MoviesCardList

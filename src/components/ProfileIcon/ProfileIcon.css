@@ -1,4 +1,5 @@
 .profile-icon {
+       display: block;
     grid-column: 4;
     text-decoration: none;
    }
@@ -34,7 +35,36 @@
        padding: 7px;
 }
 
+.profile-icon_on {
+       display: block;
+}
+
 .profile-icon_disabled {
        display: none;
-   }
+}
 
+@media screen and (min-width: 320px) and (max-width: 767px){
+    
+       .profile-icon {
+              display: none;
+
+          }
+
+          .profile-icon_on {
+              display: block;
+       }
+
+}
+   
+@media screen and (min-width: 768px) and (max-width: 1023px){
+       
+       .profile-icon {
+              display: none;
+
+          }
+
+          .profile-icon_on {
+              display: block;
+       }
+
+}

@@ -152,12 +152,12 @@
         width: calc(100% - 100px);
         padding-bottom: 93px;
         column-gap: 30px;
+        row-gap: 22px;
     }
 
     .aboutProject__paragraph{
         font-size: 12px;
         line-height: 18px;
-        padding-bottom: 93px;
     }
 
     .aboutProject__progress{

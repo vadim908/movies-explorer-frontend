@@ -41,11 +41,13 @@ function App() {
             onBurger={handleBurgerClick}
             onLike={handleLikeClick}
             isLike={islike}
+            isOpen={isBurgerPopupOpen}
           />
         </Route>
         <Route path="/saved-movies">
           <SavedMovies
             onBurger={handleBurgerClick}
+            isOpen={isBurgerPopupOpen}
           />
         </Route>
         <Route path="/sign-up">
@@ -55,7 +57,9 @@ function App() {
           <Login/>
         </Route>
         <Route path="/profile">
-        <Profile onBurger={handleBurgerClick}/>
+        <Profile onBurger={handleBurgerClick}
+        isOpen={isBurgerPopupOpen}
+        />
         </Route>
       </Switch>
       <PopupMovie isOpen={isBurgerPopupOpen} onClose= {closePopup}/>

@@ -5,10 +5,12 @@ import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 
 const SavedMovies = (props) => {
+
     return (
         <section className="savedMovies">
             <Header
                 onBurger={props.onBurger}
+                isOpen={props.isOpen}
             />
             <SearchForm/>
             <MoviesCardList/>

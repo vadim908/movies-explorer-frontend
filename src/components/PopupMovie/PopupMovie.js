@@ -23,7 +23,11 @@ function PopupMovie(props) {
             </NavLink>
 
         </nav>
-        <ProfileIcon/>
+        <div className="popup-movie__profile-icon">
+        <ProfileIcon
+        isOpen={props.isOpen}
+        />
+        </div>
       </div>
 
     </div>

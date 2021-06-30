@@ -5,7 +5,10 @@ function Profile(props) {
 
   return (
     <section className="profile">
-      <Header onBurger={props.onBurger}/>
+      <Header 
+      onBurger={props.onBurger}
+      isOpen={props.isOpen}
+      />
         <h1 className="profile__title">Привет, Вадим!</h1>
         <form className="profile__form">
             <div className="profile__container">
