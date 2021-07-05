@@ -1,26 +1,60 @@
 import React from 'react';
-import like from '../../image/save5.svg'
-import img from '../../image/pic__COLOR_pic.png'
-import { useHistory} from 'react-router-dom'; 
-import del from '../../image/d5.svg';
-import notLike from '../../image/save5d.svg';
+
 
 function MoviesCard(props) {
+const [like, setLike] = React.useState(false)
 
-  const history = useHistory();
+  function onLike(){
+    setLike(!like)
+  }
 
-  const likeClick = `${props.isLike ? like : notLike}`
+  const handleClick = () => {
+    if (!props.saved) {
+      props.onAddMovie({
+        country: props.movie.country,
+        director: props.movie.director,
+        duration: props.movie.duration,
+        year: props.movie.year,
+        description: props.movie.description,
+        image: props.movie.image,
+        trailer: props.movie.trailer,
+        thumbnail: props.movie.thumbnail,
+        movieId: props.movie.movieId,
+        nameRU: props.movie.nameRU,
+        nameEN: props.movie.nameEN,
+        isSaved: props.movie.isSaved,
+      });
+      onLike()
+    } else {
+      props.onDeleteMovieCard(props.movie.movieId);
+      onLike()
+    }
+  };
 
-  const delSaveMovie = `${history.location.pathname === '/saved-movies' ? del : likeClick}`
+  function handleDelMovie(){
+    props.onDeleteMovieCard(props.movie.movieId);
+  }
+
 
   return (
     <section className="moviesCard">
         <div className="moviesCard__container">
-            <h2 className="moviesCard__name">33 слова о дизайне</h2>
-            <p className="moviesCard__time">1ч 42м</p>
-            <img className="moviesCard__like" onClick={props.onLike} src={delSaveMovie} alt="like"/>
+            <h2 className="moviesCard__name">{props.movie.nameRU}</h2>
+            <p className="moviesCard__time">{`${Math.floor(
+            (props.movie.duration) / 60
+          )}ч ${(props.movie.duration) % 60}м`}</p>
+            {props.isSavedMovies ? (
+          <div className="moviesCard__delete" onClick={handleDelMovie} />
+        ) : (
+          <div
+            className={`moviesCard__like ${like ? "moviesCard__like_active" : ""}`}
+            onClick={handleClick}
+          />
+        )}
         </div>
-        <img className="moviesCard__img" src={img} alt="Обложка"/>
+        <a href={props.movie.trailer } rel="noreferrer" target="_blank">
+        <img className="moviesCard__img" src={ props.movie.image} alt="Обложка"/>
+                </a>
     </section>
   );
 }

@@ -7,6 +7,28 @@
     margin-top: 40px;
 }
 
+.moviesCard__delete {
+    background-image: url('../../image/d5.svg');
+    background-repeat: no-repeat;
+    width: 14px;
+    height: 12px;
+    margin-left: 22px;
+}
+
+.moviesCard__like {
+    width: 14px;
+    height: 12px;
+    margin-left: 22px;
+    background-image: url('../../image/save5d.svg');
+    background-repeat: no-repeat;
+    
+}
+
+.moviesCard__like_active {
+    background-image: url('../../image/save5.svg');
+    background-repeat: no-repeat;
+}
+
 .moviesCard__container {
     display: flex;
     flex-direction: column;
@@ -43,6 +65,8 @@
 }
 
 .moviesCard__img {
+    width: 220px;
+    height: 122px;
     padding: 6px;
 }
 
@@ -60,7 +84,8 @@
     .moviesCard__img {
         grid-row: 1;
         grid-column: 1/-1;
-        min-width: 300px;
+        width: 300px;
+        height: 168px;
         padding: 0;
     }
 

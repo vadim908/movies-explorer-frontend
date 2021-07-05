@@ -4,6 +4,17 @@
     padding-bottom: 48px;
 }
 
+.searchForm-error {
+  font-family: "Inter",Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 18px;
+  width: calc(100% - 140px);
+  margin: auto;
+  color: red;
+}
+
 .search-form__form {
   width: 100%;
   display: flex;
@@ -128,6 +139,10 @@
       justify-content: space-between;
     }
 
+    .searchForm-error {
+      width: calc(100% - 28px);
+    }
+
     .searchForm__input{
       font-size: 18px;
       line-height: 22px;
@@ -176,5 +191,9 @@
   .searchForm__container {
     width: calc(100% - 60px);
     padding-top: 80px;
+  }
+
+  .searchForm-error {
+    width: calc(100% - 60px);
   }
 }

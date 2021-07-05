@@ -10,9 +10,8 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Profile from '../Profile/Profile'
-import { Route, Switch, useHistory} from 'react-router-dom'; 
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom'; 
 import PopupMovie from '../PopupMovie/PopupMovie';
-import NotFound from '../NotFound/NotFound';
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 
 function App() {
@@ -39,18 +38,8 @@ function App() {
         localStorage.setItem('jwt', data.token); 
         history.push('/movies'); 
          return data; 
-       }})
-      .catch((err) => {
-        setMessage("При авторизации произошла ошибка");
-        if (err === 401) {
-          setMessage("Пользователь с таким email не найден");
-        }
-        if (err === 400) {
-          setMessage("Неверный email или пароль");
-        }
-        localStorage.removeItem("jwt");
-      });
-}
+       }}
+  )}
 
   const handleRegist = (name, email, password) => {
     return auth.register(name, email, password)
@@ -87,7 +76,7 @@ function App() {
         localStorage.removeItem('jwt'); 
       }) 
     } 
-    }, [loggedIn, history])
+    }, [loggedIn])
 
     // Получение фильмов
     useEffect(()=> {
@@ -122,7 +111,7 @@ function App() {
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
       });
-    }, [loggedIn, baseUrl])
+    }, [loggedIn])
 
     function saveMovie(movie) {
       if(!movie){
@@ -136,11 +125,12 @@ function App() {
           if (!userMovie) {
             throw new Error("При добавлении фильма произошла ошибка");
           } else {
-
-            userMovie.isSaved = true
-
-            setUserMovies([userMovie]);
-
+            const ds = [userMovie]
+            const movieisSaved = ds.map((i) =>{
+              const obj = 
+              i.isSaved === true
+            })
+            setUserMovies([movieisSaved]);
           }
         })
         .catch((err) => {
@@ -176,7 +166,7 @@ function App() {
             console.log(err);
           });
       
-    }, [loggedIn, history]);
+    }, [loggedIn]);
 
     function filterShortMovies(arr) {
       if (arr.length !== 0 || arr !== "undefind") {
@@ -244,32 +234,7 @@ function App() {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userMovies]);
 
-    function handleUpdateUser(data) {
-      mainApi
-        .editUserInfo(data)
-        .then((editedData) => {
-          setCurrentUser(editedData);
-          setMessage("Данные профиля успешно обновлены");
-        })
-        .catch((err) => {
-          console.log(`Ошибка: ${err}`);
-          if (err.status === 409) {
-            setMessage("Пользователь с таким email уже существует");
-          } else {
-            setMessage("При изменении данных профиля произошла ошибка");
-          }
-        });
-    }
 
-    const handleSignOut = () => {
-      localStorage.removeItem("jwt");
-      setUserMovies([]);
-      setSortedMovies([]);
-      setCurrentUser({});
-      setLoggedIn(false);
-      setMessage("");
-      history.push("/");
-    };
 
 
 
@@ -320,7 +285,6 @@ function App() {
           onDeleteMovieCard={delMovie}
           onGetMovies={handleGetMovies}
           likedMovies={checkSavedMovie}
-          message={moviesMessage}
         />
 
         <ProtectedRoute 
@@ -335,7 +299,6 @@ function App() {
           onFilter={handleCheckBox}
           onDeleteMovieCard={delMovie}
           onGetMovies={handleGetSavedMovies}
-          message={moviesMessage}
         />
         <Route path="/sign-up">
           <Register
@@ -346,22 +309,15 @@ function App() {
         <Route path="/sign-in">
           <Login
           onLogin={handleLogin}
-          message={message}
           />
         </Route>
 
         <ProtectedRoute 
           path="/profile"
           component={Profile}
-          onProfile={handleUpdateUser}
           onBurger={handleBurgerClick}
           message={message}
-          loggedIn={loggedIn}
-          onExit= {handleSignOut}
         />
-        <Route path="*">
-          <NotFound />
-        </Route>
       </Switch>
       <PopupMovie isOpen={isBurgerPopupOpen} onClose= {closePopup}/>
       </CurrentUserContext.Provider>

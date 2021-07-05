@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import iconca from '../../image/icon__COLOR_icon-main.svg'
 
 function ProfileIcon(props) {
@@ -25,13 +25,14 @@ React.useEffect(()=> {
     const vizibleIcon = `${icon ? 'profile-icon_on' : ''}`
 
 
+
   return (
-    <NavLink className={`profile-icon ${profileIcon} ${vizibleIcon}`} to="/profile">
+    <Link id="RouterNavLink" to="/profile" className={`profile-icon ${profileIcon} ${vizibleIcon}`} >
             <button className="profile-icon__button">
             <p className="profile-icon__button-title">Аккаунт</p>
             <img className="profile-icon__button-img" src={iconca} alt="Иконка"/>
             </button>
-    </NavLink>
+    </Link>
   )
 }
 

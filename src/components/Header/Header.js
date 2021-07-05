@@ -14,9 +14,11 @@ function Header(props) {
         <Navigation
           onBurger={props.onBurger}
         />
+
         <ProfileIcon
         isOpen={props.isOpen}
         />
+
         
     </header>
   );
