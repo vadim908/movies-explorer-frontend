@@ -1,7 +1,7 @@
 # Ссылка на проект
-https://vadim.dip.nomoredomains.club
+https://vadim.d.nomoredomains.club
 
 
 ## Ip 
 
-130.193.39.181
+217.28.229.210
