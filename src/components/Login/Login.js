@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Link } from 'react-router-dom'; 
 import logo from '../../image/logo.svg';
+import Preloader from '../Preloader/Preloader';
 
 function Login(props) {
 
@@ -53,10 +54,22 @@ function Login(props) {
 
   const handleSubmit = (e) => {
     let {email, password } = data;
+
+    
     e.preventDefault()
 
-    props.onLogin(email, password)
+
+      props.onLogin(email, password)
+    
 }
+
+React.useEffect(()=> {
+  if(data.email !== '' && data.password !== ''){
+    setFormValid(true);
+  } else {
+    setFormValid(false);
+  }
+})
 
   return (
     <section className="login">
@@ -66,7 +79,7 @@ function Login(props) {
           </Link>
             <h1 className="login__title">Рады видеть!</h1>
         </div>
-
+        <Suspense fallback={<Preloader />}>
         <form onSubmit={handleSubmit} className='login__form'>
                 <label className='login__label' htmlFor="email">Email</label>
                 <input id="email" name='email' onChange={handleChange} type="email" className='login__input'/>
@@ -83,6 +96,7 @@ function Login(props) {
                  <Link to="/sign-up" className="login__link">Регистрация</Link>
                  </p>
             </form>
+          </Suspense>
     </section>
   );
 }

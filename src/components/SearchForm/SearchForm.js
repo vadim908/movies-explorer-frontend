@@ -55,7 +55,7 @@ function SearchForm(props) {
         <div className="searchForm__side">
             <input type="checkbox"  onClick={props.onFilter} defaultChecked={props.isShortMovie} className="searchForm__checkbox" id="checkbox2" />
             <label htmlFor="checkbox2" className="searchForm__switch">Короткометражки</label>
-        </div> 
+        </div>
 
     </section>
   );

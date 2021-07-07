@@ -2,11 +2,10 @@ import React from 'react';
 
 
 function MoviesCard(props) {
-const [like, setLike] = React.useState(false)
 
-  function onLike(){
-    setLike(!like)
-  }
+
+const isLike = props.likemovie(props.movie);
+
 
   const handleClick = () => {
     if (!props.saved) {
@@ -24,15 +23,16 @@ const [like, setLike] = React.useState(false)
         nameEN: props.movie.nameEN,
         isSaved: props.movie.isSaved,
       });
-      onLike()
+    
     } else {
       props.onDeleteMovieCard(props.movie.movieId);
-      onLike()
+      
     }
   };
 
   function handleDelMovie(){
     props.onDeleteMovieCard(props.movie.movieId);
+
   }
 
 
@@ -47,7 +47,7 @@ const [like, setLike] = React.useState(false)
           <div className="moviesCard__delete" onClick={handleDelMovie} />
         ) : (
           <div
-            className={`moviesCard__like ${like ? "moviesCard__like_active" : ""}`}
+            className={`moviesCard__like ${isLike ? "moviesCard__like_active" : ""}`}
             onClick={handleClick}
           />
         )}

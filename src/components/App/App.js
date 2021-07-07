@@ -10,7 +10,7 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Profile from '../Profile/Profile'
-import { Route, Switch, useHistory} from 'react-router-dom'; 
+import {Redirect, Route, Switch, useHistory} from 'react-router-dom'; 
 import PopupMovie from '../PopupMovie/PopupMovie';
 import NotFound from '../NotFound/NotFound';
 import CurrentUserContext from "../../contexts/CurrentUserContext";
@@ -27,6 +27,7 @@ function App() {
   const [checkMovies, setCheckMovies] = useState([]);
   const [moviesMessage, setMoviesMessage] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
+
   const baseUrl = `https://api.nomoreparties.co`;
 
   const history = useHistory();
@@ -58,7 +59,7 @@ function App() {
             setMessage('Вы успешно зарегистрировались!');
             setCurrentUser(res)
             setLoggedIn(true)
-            history.push('/sign-in');
+            history.push('/movies');
       }
     )
     .catch((err) => {
@@ -78,9 +79,9 @@ function App() {
       return  auth.getContent(jwt).then((res) => { 
       if (res){ 
         setCurrentUser(res) 
-        } 
+        }
+        history.push('/movies')
         setLoggedIn(true) 
-        history.push("/movies") 
       }) 
       .catch((err)=>{ 
         console.log(err); 
@@ -91,7 +92,9 @@ function App() {
 
     // Получение фильмов
     useEffect(()=> {
-      return moviesApi.getMoviesData()
+      const saveMovieJWT = localStorage.getItem("movies");
+      if(!saveMovieJWT){
+        return moviesApi.getMoviesData()
       .then((data) => {
         const allMovies = data.map(({
           country,
@@ -118,10 +121,18 @@ function App() {
           thumbnail: image ? `${baseUrl}${image.url}` : "#",
         }))
         setMovies(allMovies);
+        localStorage.setItem("movies", JSON.stringify(allMovies));
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
+        localStorage.removeItem("movies");
       });
+      }
+      else{
+
+        const jwtMovie = JSON.parse(localStorage.getItem("allMovies"))
+        setMovies(jwtMovie)
+      }
     }, [loggedIn, baseUrl])
 
     function saveMovie(movie) {
@@ -136,10 +147,12 @@ function App() {
           if (!userMovie) {
             throw new Error("При добавлении фильма произошла ошибка");
           } else {
-
+            localStorage.setItem(
+              "userMovies",
+              JSON.stringify((userMovie = [userMovie.movie, ...userMovies]))
+            );
             userMovie.isSaved = true
-
-            setUserMovies([userMovie]);
+            setUserMovies(prev => ([...prev, userMovie]));
 
           }
         })
@@ -150,25 +163,26 @@ function App() {
     }
 
     function delMovie(movie){
-      const id = userMovies.find((item) => item.movieId === movie);
+      const id = userMovies.find((item) => item.movieId === movie)._id;
+      
       mainApi
-      .deleteMovie(id._id, localStorage.getItem('jwt'))
-      .then((deletedMovie) => {
-        if (!deletedMovie) {
-          throw new Error("При удалении фильма произошла ошибка");
-        } else {
-          const newMoviesList = userMovies.filter((c) => c.movieId !== id);
-          setUserMovies(newMoviesList);
-        }
-      })
+      .deleteMovie(id, localStorage.getItem('jwt'))
+      .then(() => {
+          setUserMovies(prev => prev.filter(item => item._id !== id));
+        })
+      
       .catch((err) => console.log(`При удалении фильма: ${err}`));
     }
+
+    React.useEffect(()=> {
+      filterShortMovies(userMovies)
+    },[userMovies])
 
     React.useEffect(() => {
         Promise.all([mainApi.getUserData(localStorage.getItem('jwt')), mainApi.getUserMovies(localStorage.getItem('jwt'))])
           .then(([userData, savedMovies]) => {
             setLoggedIn(true)
-            history.push("/movies")
+            
             const itemMovie = savedMovies.filter((i) => i.owner === userData._id)
             setUserMovies(itemMovie);
           })
@@ -176,9 +190,10 @@ function App() {
             console.log(err);
           });
       
-    }, [loggedIn, history]);
+    }, [loggedIn]);
 
     function filterShortMovies(arr) {
+
       if (arr.length !== 0 || arr !== "undefind") {
         return arr.filter((movie) =>
           shortMovies ? movie.duration <= 40 : true
@@ -235,7 +250,7 @@ function App() {
 
     function checkSavedMovie(movie) {
       return (movie.isSaved = userMovies.some(
-        (userMovie) => userMovie.movieId === movie.id
+        (userMovie) => userMovie.movieId === movie.movieId
       ));
     }
 
@@ -263,6 +278,8 @@ function App() {
 
     const handleSignOut = () => {
       localStorage.removeItem("jwt");
+      localStorage.removeItem("movies")
+      localStorage.removeItem("userMovies")
       setUserMovies([]);
       setSortedMovies([]);
       setCurrentUser({});
@@ -271,27 +288,6 @@ function App() {
       history.push("/");
     };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
   function handleBurgerClick(){ 
     openBurgerPopupClick(true); 
    }
@@ -321,6 +317,7 @@ function App() {
           onGetMovies={handleGetMovies}
           likedMovies={checkSavedMovie}
           message={moviesMessage}
+          likemovie = {checkSavedMovie}
         />
 
         <ProtectedRoute 
@@ -328,6 +325,7 @@ function App() {
           component={SavedMovies}
           onBurger={handleBurgerClick}
           movies={movies}
+          userMovies={userMovies}
           loggedIn={loggedIn}
           isSavedMovies ={true}
           isShortMovie={shortMovies}
@@ -336,6 +334,7 @@ function App() {
           onDeleteMovieCard={delMovie}
           onGetMovies={handleGetSavedMovies}
           message={moviesMessage}
+          delMovie={delMovie}
         />
         <Route path="/sign-up">
           <Register
@@ -362,6 +361,7 @@ function App() {
         <Route path="*">
           <NotFound />
         </Route>
+        <Redirect to="*" />
       </Switch>
       <PopupMovie isOpen={isBurgerPopupOpen} onClose= {closePopup}/>
       </CurrentUserContext.Provider>

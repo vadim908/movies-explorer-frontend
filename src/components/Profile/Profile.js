@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, Suspense} from 'react';
 import Header from '../Header/Header';
 import CurrentUserContext from "../../contexts/CurrentUserContext";
+import Preloader from '../Preloader/Preloader';
 
 function Profile(props) {
   const currentUser = React.useContext(CurrentUserContext);
@@ -10,6 +11,7 @@ function Profile(props) {
   });
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [formValid, setFormValid] = useState(false);
 
   const  handleChange = (e) => {
     const validName = /^[a-zA-Z- ]+$/.test(e.target.value);
@@ -34,6 +36,7 @@ function Profile(props) {
         setNameError("");
       }
     }
+    
 
     if(e.target.id === "email"){
       if (!validEmail) {
@@ -44,40 +47,64 @@ function Profile(props) {
     }
   }
 
+
+  React.useEffect(() => {
+    if (
+      !nameError &&
+      !emailError 
+    ) {
+      setFormValid(true);
+    } else {
+      setFormValid(false);
+    }
+  }, [nameError, emailError]);
+
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    props.onProfile(data)
+      props.onProfile(data)
+    
 }
+
+React.useEffect(()=> {
+  if(data.name !== '' && data.email !== ''){
+    setFormValid(true);
+  } else {
+    setFormValid(false);
+  }
+})
 
   return (
     <section className="profile">
       <Header 
       onBurger={props.onBurger}
       isOpen={props.isOpen}
-      />
+      />      
+
         <h1 className="profile__title">Привет, {currentUser.name}</h1>
-
+        <Suspense fallback={<Preloader />}>
         <form onSubmit={handleSubmit} className="profile__form">
-            <div className="profile__container">
-                <label htmlFor="name" className="profile__label">Имя</label>
-                <input id="name" onChange={handleChange} name="name" className="profile__input" />
-            </div>
-            <span id="name-error" className="profile__error" >{nameError}</span>
+        <div className="profile__container">
+          <label htmlFor="name" className="profile__label">Имя</label>
+          <input id="name" type="text" onChange={handleChange} value={currentUser.name} name="name" className="profile__input" />
+        </div>
+        <span id="name-error" className="profile__error" >{nameError}</span>
 
-            <div className="profile__container">
-            <label htmlFor="email" className="profile__label">Email</label>
-            <input id="email" onChange={handleChange} name="email" className="profile__input" />
-          
+        <div className="profile__container">
+        <label htmlFor="email" className="profile__label">Email</label>
+        <input id="email" type="text" onChange={handleChange} value={currentUser.email} name="email" className="profile__input" />
+    
 
-            </div>
-            <span id="email-error" className="profile__error" >{emailError}</span>
+        </div>
+        <span id="email-error" className="profile__error" >{emailError}</span>
 
-            <div className="profile__error">{props.message}</div>
+        <div className="profile__error">{props.message}</div>
 
-            <button type="submit" className='profile__button'>Редактировать</button>
-            <button type="button" onClick={props.onExit} className='profile__exit'>Выйти из аккаунта</button>
+        <button type="submit" disabled={!formValid} className='profile__button'>Редактировать</button>
+        <button type="button" onClick={props.onExit} className='profile__exit'>Выйти из аккаунта</button>
         </form>
+      </Suspense>
+
     </section>
   );
 }

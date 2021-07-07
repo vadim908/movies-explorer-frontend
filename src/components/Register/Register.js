@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { Link } from 'react-router-dom'; 
 import logo from '../../image/logo.svg';
+import Preloader from '../Preloader/Preloader';
 
 function Register(props) {
 
@@ -68,41 +69,57 @@ function Register(props) {
 
   const handleSubmit = (e) => {
     let {name, email, password } = data;
+    
     e.preventDefault()
 
-    props.onRegister(name, email, password)
+      props.onRegister(name, email, password)
+    
+
 }
+
+React.useEffect(()=> {
+  if(data.name !== '' && data.email !== '' && data.password !== ''){
+    setFormValid(true);
+  } else {
+    setFormValid(false);
+  }
+})
  
   return (
     <section className="register">
+
+
         <div className="register__container">
-          <Link to='/'>
-            <img src={logo} alt="Лого" className="register__img"/>
-          </Link>
-            
-            <h1 className="register__title">Добро пожаловать!</h1>
-        </div>
-        <form onSubmit={handleSubmit} className='register__form'>
-                <label className='register__label' htmlFor="name">Имя</label>
-                <input id="name" onChange={handleChange} name='name' type="text" className='register__input'/>
-                <span id="name-error" className="error" >{nameError}</span>
+            <Link to='/'>
+              <img src={logo} alt="Лого" className="register__img"/>
+            </Link>
+              
+              <h1 className="register__title">Добро пожаловать!</h1>
+          </div>
+          <Suspense fallback={<Preloader />}>
+          <form onSubmit={handleSubmit} className='register__form'>
+                  <label className='register__label' htmlFor="name">Имя</label>
+                  <input id="name" onChange={handleChange} name='name' type="text" className='register__input'/>
+                  <span id="name-error" className="error" >{nameError}</span>
 
-                <label className='register__label' htmlFor="email">Email</label>
-                <input id="email" onChange={handleChange} name='email'  type="email" className='register__input'/>
-                <span id="email-error" className="error" >{emailError}</span>
+                  <label className='register__label' htmlFor="email">Email</label>
+                  <input id="email" onChange={handleChange} name='email'  type="email" className='register__input'/>
+                  <span id="email-error" className="error" >{emailError}</span>
 
-                <label className='register__label' htmlFor="password">Пароль</label>
-                <input id="password" onChange={handleChange} name='password' type="password" className='register__input'/>
-                <span id="password-error" className="error" >{passwordError}</span>
-                <div className="error__form">
-                    {props.message}
-                </div>
-                <button disabled={!formValid} type="submit" className='register__button'>Зарегистрироваться</button>
-                <p className="register__subtitle">Уже зарегистрированы?
-                 <Link to="/sign-in" className="register__link">Войти</Link>
-                 </p>
-                 
-            </form>
+                  <label className='register__label' htmlFor="password">Пароль</label>
+                  <input id="password" onChange={handleChange} name='password' type="password" className='register__input'/>
+                  <span id="password-error" className="error" >{passwordError}</span>
+                  <div className="error__form">
+                      {props.message}
+                  </div>
+                  <button disabled={!formValid} type="submit" className='register__button'>Зарегистрироваться</button>
+                  <p className="register__subtitle">Уже зарегистрированы?
+                  <Link to="/sign-in" className="register__link">Войти</Link>
+                  </p>
+                  
+              </form>
+            </Suspense>
+        
     </section>
   );
 }

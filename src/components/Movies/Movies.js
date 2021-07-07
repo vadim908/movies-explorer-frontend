@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import SubLoading from '../SubLoading/SubLoading';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
+import Preloader from '../Preloader/Preloader';
 
 function Movies(props) {
 
@@ -21,6 +22,7 @@ function Movies(props) {
         onFilter={props.onFilter}
         isShortMovie={props.isShortMovie}
         />
+        <Suspense fallback={<Preloader />}>
         <MoviesCardList
           onLike={props.onLike}
           isLike={props.isLike}
@@ -35,18 +37,21 @@ function Movies(props) {
           savedMovies={props.savedMovies}
           counter={counter}
           like={props.like}
+          likemovie={props.likemovie}
         />
-        {props.movies.length >= 4 &&
-  props.movies.length > counter &&
-  props.movies.length <= 100 &&
-  !props.message ? (
-    <SubLoading
-        counter={counter}
-        setCounter={setCounter}
-        />
-  ) : (
-    ""
-  )}
+          {props.movies.length >= 4 &&
+          props.movies.length > counter &&
+          props.movies.length <= 100 &&
+          !props.message ? (
+            <SubLoading
+                counter={counter}
+                setCounter={setCounter}
+                />
+          ) : (
+            ""
+          )}
+        </Suspense>
+        
         <Footer/>
     </div>
   );
