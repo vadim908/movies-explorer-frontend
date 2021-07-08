@@ -24,6 +24,7 @@ const SavedMovies = (props) => {
           movies={props.userMovies}
           onDeleteMovieCard={props.onDeleteMovieCard}
           message={props.message}
+          likemovie={props.likemovie}
         />
       ) : (
         <p className="savedMovies-message">У вас пока нет сохраненных фильмов</p>

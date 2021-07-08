@@ -27,6 +27,7 @@ function App() {
   const [checkMovies, setCheckMovies] = useState([]);
   const [moviesMessage, setMoviesMessage] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
+  const [checkSave, setCheckSave] = useState(false);
 
   const baseUrl = `https://api.nomoreparties.co`;
 
@@ -85,7 +86,8 @@ function App() {
       }) 
       .catch((err)=>{ 
         console.log(err); 
-        localStorage.removeItem('jwt'); 
+        localStorage.removeItem('jwt');
+        setLoggedIn(false) 
       }) 
     } 
     }, [loggedIn, history])
@@ -130,7 +132,7 @@ function App() {
       }
       else{
 
-        const jwtMovie = JSON.parse(localStorage.getItem("allMovies"))
+        const jwtMovie = JSON.parse(localStorage.getItem("movies"))
         setMovies(jwtMovie)
       }
     }, [loggedIn, baseUrl])
@@ -149,11 +151,9 @@ function App() {
           } else {
             localStorage.setItem(
               "userMovies",
-              JSON.stringify((userMovie = [userMovie.movie, ...userMovies]))
-            );
-            userMovie.isSaved = true
+              JSON.stringify(userMovie));
             setUserMovies(prev => ([...prev, userMovie]));
-
+            setCheckSave(true)
           }
         })
         .catch((err) => {
@@ -169,6 +169,7 @@ function App() {
       .deleteMovie(id, localStorage.getItem('jwt'))
       .then(() => {
           setUserMovies(prev => prev.filter(item => item._id !== id));
+          setCheckSave(false)
         })
       
       .catch((err) => console.log(`При удалении фильма: ${err}`));
@@ -179,6 +180,7 @@ function App() {
     },[userMovies])
 
     React.useEffect(() => {
+      if(loggedIn === true){
         Promise.all([mainApi.getUserData(localStorage.getItem('jwt')), mainApi.getUserMovies(localStorage.getItem('jwt'))])
           .then(([userData, savedMovies]) => {
             setLoggedIn(true)
@@ -189,7 +191,7 @@ function App() {
           .catch((err) => {
             console.log(err);
           });
-      
+      }
     }, [loggedIn]);
 
     function filterShortMovies(arr) {
@@ -257,7 +259,7 @@ function App() {
     React.useEffect(() => {
       checkSavedMovie(sortedMovies);
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userMovies]);
+    }, [checkSave]);
 
     function handleUpdateUser(data) {
       mainApi
@@ -335,6 +337,7 @@ function App() {
           onGetMovies={handleGetSavedMovies}
           message={moviesMessage}
           delMovie={delMovie}
+          likemovie = {checkSavedMovie}
         />
         <Route path="/sign-up">
           <Register
