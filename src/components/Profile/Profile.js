@@ -15,9 +15,10 @@ function Profile(props) {
 
   const  handleChange = (e) => {
     const validName = /^[a-zA-Z- ]+$/.test(e.target.value);
-    const validEmail = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i.test(
+    const validEmail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i.test(
       e.target.value
     );
+
 
     const {name, value} = e.target;
     setData({
@@ -28,12 +29,16 @@ function Profile(props) {
     if(e.target.id === "name"){
       if (e.target.value.length < 2) {
         setNameError("Длина имени должна быть не менее 2 символов");
+        setFormValid(false);
       } else if (e.target.value.length > 30) {
         setNameError("Длина имени должна должна быть не более 30 символов");
+        setFormValid(false);
       } else if (!validName) {
         setNameError("Имя должно быть указано латиницей");
+        setFormValid(false);
       } else {
         setNameError("");
+        setFormValid(true);
       }
     }
     
@@ -41,23 +46,13 @@ function Profile(props) {
     if(e.target.id === "email"){
       if (!validEmail) {
         setEmailError("Неверный формат почты");
+        setFormValid(false);
       } else {
         setEmailError("");
+        setFormValid(true);
       }
     }
   }
-
-
-  React.useEffect(() => {
-    if (
-      !nameError &&
-      !emailError 
-    ) {
-      setFormValid(true);
-    } else {
-      setFormValid(false);
-    }
-  }, [nameError, emailError]);
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -65,14 +60,6 @@ function Profile(props) {
       props.onProfile(data)
     }
 }
-
-React.useEffect(()=> {
-  if(data.name !== '' && data.email !== ''){
-    setFormValid(true);
-  } else {
-    setFormValid(false);
-  }
-})
 
   return (
     <section className="profile">

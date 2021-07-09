@@ -14,9 +14,10 @@ function Login(props) {
   });
 
   const  handleChange = (e) => {
-    const validEmail = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i.test(
+    const validEmail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i.test(
       e.target.value
     );
+
     const {name, value} = e.target;
     setData({
         ...data,
@@ -26,31 +27,24 @@ function Login(props) {
     if(e.target.id === "email"){
       if (!validEmail) {
         setEmailError("Неверный формат почты");
+        setFormValid(false);
       } else {
         setEmailError("");
+        setFormValid(true);
       }
     }
 
     if(e.target.id === "password"){
       if (e.target.value.length < 6) {
         setPasswordError("Пароль должен быть не менее 6 символов");
+        setFormValid(false);
       } else {
         setPasswordError("");
+        setFormValid(true);
       }
     }
 
   }
-
-  React.useEffect(() => {
-    if (
-      !emailError &&
-      !passwordError
-    ) {
-      setFormValid(true);
-    } else {
-      setFormValid(false);
-    }
-  }, [emailError, passwordError]);
 
   const handleSubmit = (e) => {
     let {email, password } = data;
@@ -62,14 +56,6 @@ function Login(props) {
       props.onLogin(email, password)
     }
 }
-
-React.useEffect(()=> {
-  if(data.email !== '' && data.password !== ''){
-    setFormValid(true);
-  } else {
-    setFormValid(false);
-  }
-})
 
   return (
     <section className="login">

@@ -16,7 +16,7 @@ function Register(props) {
 
   const  handleChange = (e) => {
     const validName = /^[a-zA-Z- ]+$/.test(e.target.value);
-    const validEmail = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i.test(
+    const validEmail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i.test(
       e.target.value
     );
 
@@ -29,43 +29,40 @@ function Register(props) {
     if(e.target.id === "name"){
       if (e.target.value.length < 2) {
         setNameError("Длина имени должна быть не менее 2 символов");
+        setFormValid(false);
       } else if (e.target.value.length > 30) {
         setNameError("Длина имени должна должна быть не более 30 символов");
+        setFormValid(false);
       } else if (!validName) {
         setNameError("Имя должно быть указано латиницей");
+        setFormValid(false);
       } else {
         setNameError("");
+        setFormValid(true);
       }
     }
 
     if(e.target.id === "email"){
       if (!validEmail) {
         setEmailError("Неверный формат почты");
+        setFormValid(false);
       } else {
         setEmailError("");
+        setFormValid(true);
       }
     }
 
     if(e.target.id === "password"){
       if (e.target.value.length < 6) {
         setPasswordError("Пароль должен быть не менее 6 символов");
+        setFormValid(false);
       } else {
         setPasswordError("");
+        setFormValid(true);
       }
     }
   }
 
-  React.useEffect(() => {
-    if (
-      !nameError &&
-      !emailError &&
-      !passwordError
-    ) {
-      setFormValid(true);
-    } else {
-      setFormValid(false);
-    }
-  }, [nameError, emailError, passwordError]);
 
   const handleSubmit = (e) => {
     let {name, email, password } = data;
@@ -77,14 +74,6 @@ function Register(props) {
      }
 }
 
-React.useEffect(()=> {
-  if(data.name !== '' && data.email !== '' && data.password !== ''){
-    setFormValid(true);
-  } else {
-    setFormValid(false);
-  }
-})
- 
   return (
     <section className="register">
 
