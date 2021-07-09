@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; 
 import logo from '../../image/logo.svg';
 import Preloader from '../Preloader/Preloader';
@@ -72,9 +72,9 @@ function Register(props) {
     
     e.preventDefault()
 
+     if(name !== '' && email !== '' && password !== '' && name !== undefined && email !== undefined && password !== undefined){
       props.onRegister(name, email, password)
-    
-
+     }
 }
 
 React.useEffect(()=> {
@@ -96,8 +96,7 @@ React.useEffect(()=> {
               
               <h1 className="register__title">Добро пожаловать!</h1>
           </div>
-          <Suspense fallback={<Preloader />}>
-          <form onSubmit={handleSubmit} className='register__form'>
+          {props.loading ? <Preloader /> : (<form onSubmit={handleSubmit} className='register__form'>
                   <label className='register__label' htmlFor="name">Имя</label>
                   <input id="name" onChange={handleChange} name='name' type="text" className='register__input'/>
                   <span id="name-error" className="error" >{nameError}</span>
@@ -117,8 +116,10 @@ React.useEffect(()=> {
                   <Link to="/sign-in" className="register__link">Войти</Link>
                   </p>
                   
-              </form>
-            </Suspense>
+              </form>)}
+
+          
+
         
     </section>
   );

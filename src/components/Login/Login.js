@@ -55,12 +55,12 @@ function Login(props) {
   const handleSubmit = (e) => {
     let {email, password } = data;
 
-    
+  
     e.preventDefault()
 
-
+    if(email !== '' && password !== '' && email !== undefined && password !== undefined){
       props.onLogin(email, password)
-    
+    }
 }
 
 React.useEffect(()=> {
@@ -79,8 +79,7 @@ React.useEffect(()=> {
           </Link>
             <h1 className="login__title">Рады видеть!</h1>
         </div>
-        <Suspense fallback={<Preloader />}>
-        <form onSubmit={handleSubmit} className='login__form'>
+        {props.loading ? <Preloader /> : (<form onSubmit={handleSubmit} className='login__form'>
                 <label className='login__label' htmlFor="email">Email</label>
                 <input id="email" name='email' onChange={handleChange} type="email" className='login__input'/>
                 <span id="email-error" className="error" >{emailError}</span>
@@ -95,8 +94,7 @@ React.useEffect(()=> {
                 <p className="login__subtitle">Ещё не зарегистрированы?
                  <Link to="/sign-up" className="login__link">Регистрация</Link>
                  </p>
-            </form>
-          </Suspense>
+            </form>)}
     </section>
   );
 }

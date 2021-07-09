@@ -10,7 +10,7 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Profile from '../Profile/Profile'
-import {Redirect, Route, Switch, useHistory} from 'react-router-dom'; 
+import {Redirect, Route, Switch, useHistory, useLocation} from 'react-router-dom'; 
 import PopupMovie from '../PopupMovie/PopupMovie';
 import NotFound from '../NotFound/NotFound';
 import CurrentUserContext from "../../contexts/CurrentUserContext";
@@ -28,16 +28,23 @@ function App() {
   const [moviesMessage, setMoviesMessage] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [checkSave, setCheckSave] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const baseUrl = `https://api.nomoreparties.co`;
 
   const history = useHistory();
+  let location = useLocation();
 
-  const handleLogin = (email, password) => { 
+  const MAIN_PAGE = '/'
+  const PAGE_WITHOUT_AUTH = ['/movies', '/saved-movies', '/profile']
+
+  const handleLogin = (email, password) => {
+    setLoading(true)
     return auth.authorize(email, password) 
      .then((data) => { 
        if (data.token){
         setLoggedIn(true)
+        setLoading(false)
         localStorage.setItem('jwt', data.token); 
         history.push('/movies'); 
          return data; 
@@ -55,12 +62,15 @@ function App() {
 }
 
   const handleRegist = (name, email, password) => {
+    setLoading(true)
     return auth.register(name, email, password)
     .then((res) => {
             setMessage('Вы успешно зарегистрировались!');
             setCurrentUser(res)
+            setLoading(false)
             setLoggedIn(true)
             history.push('/movies');
+ 
       }
     )
     .catch((err) => {
@@ -72,28 +82,9 @@ function App() {
     });
   }
 
-
-  // Авторизация при входе
-  useEffect(()=> { 
-    const jwt = localStorage.getItem('jwt'); 
-    if(jwt){ 
-      return  auth.getContent(jwt).then((res) => { 
-      if (res){ 
-        setCurrentUser(res) 
-        }
-        history.push('/movies')
-        setLoggedIn(true) 
-      }) 
-      .catch((err)=>{ 
-        console.log(err); 
-        localStorage.removeItem('jwt');
-        setLoggedIn(false) 
-      }) 
-    } 
-    }, [loggedIn, history])
-
     // Получение фильмов
     useEffect(()=> {
+      setLoading(true)
       const saveMovieJWT = localStorage.getItem("movies");
       if(!saveMovieJWT){
         return moviesApi.getMoviesData()
@@ -122,6 +113,7 @@ function App() {
           nameEN,
           thumbnail: image ? `${baseUrl}${image.url}` : "#",
         }))
+        setLoading(false)
         setMovies(allMovies);
         localStorage.setItem("movies", JSON.stringify(allMovies));
       })
@@ -134,6 +126,7 @@ function App() {
 
         const jwtMovie = JSON.parse(localStorage.getItem("movies"))
         setMovies(jwtMovie)
+        setLoading(false)
       }
     }, [loggedIn, baseUrl])
 
@@ -142,32 +135,37 @@ function App() {
         setMessage('При добавлении фильма произошла ошибка')
       }
       else{
-
+        setLoading(true)
         delete movie.isSaved
         return mainApi.saveMovie(movie, localStorage.getItem('jwt'))
         .then((userMovie) => {
           if (!userMovie) {
             throw new Error("При добавлении фильма произошла ошибка");
           } else {
+            setLoading(false)
+            const setUserMovie = (prev => ([...prev, userMovie]));
+            
+            setUserMovies(setUserMovie);
+            setCheckSave(true)
             localStorage.setItem(
               "userMovies",
-              JSON.stringify(userMovie));
-            setUserMovies(prev => ([...prev, userMovie]));
-            setCheckSave(true)
+              JSON.stringify(userMovies));
           }
         })
         .catch((err) => {
           console.log(`Ошибка: ${err}`);
+          localStorage.removeItem("userMovies");
         });
       }
     }
 
     function delMovie(movie){
       const id = userMovies.find((item) => item.movieId === movie)._id;
-      
+      setLoading(true)
       mainApi
       .deleteMovie(id, localStorage.getItem('jwt'))
       .then(() => {
+        setLoading(false)
           setUserMovies(prev => prev.filter(item => item._id !== id));
           setCheckSave(false)
         })
@@ -180,19 +178,61 @@ function App() {
     },[userMovies])
 
     React.useEffect(() => {
-      if(loggedIn === true){
-        Promise.all([mainApi.getUserData(localStorage.getItem('jwt')), mainApi.getUserMovies(localStorage.getItem('jwt'))])
-          .then(([userData, savedMovies]) => {
-            setLoggedIn(true)
-            
-            const itemMovie = savedMovies.filter((i) => i.owner === userData._id)
-            setUserMovies(itemMovie);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+      const path = location.pathname;
+      const jwt = localStorage.getItem('jwt')
+      if(!jwt)
+      {
+        setLoading(true)
+      const userMovie = localStorage.getItem("userMovies");
+      const userData = localStorage.getItem("currentUser");
+      if(!userMovie && !userData){
+        if(loggedIn === true){
+          Promise.all([mainApi.getUserData(localStorage.getItem('jwt')), mainApi.getUserMovies(localStorage.getItem('jwt'))])
+            .then(([userData, savedMovies]) => {
+              setLoggedIn(true)
+              setLoading(false)
+              history.push("/movies")
+              const itemMovie = savedMovies.filter((i) => i.owner === userData._id)
+              setUserMovies(itemMovie);
+              localStorage.setItem("currentUser", JSON.stringify(userData));
+              localStorage.setItem(
+                "userMovies",
+                JSON.stringify(userMovies));
+            })
+            .catch((err) => {
+              console.log(err);
+              setLoggedIn(false)
+              localStorage.removeItem("currentUser");
+              localStorage.removeItem("userMovies")
+              PAGE_WITHOUT_AUTH.includes(path) ? history.push(path)  : history.push(MAIN_PAGE);
+            });
+        }
       }
+      else{
+        const pasteUserMovies = JSON.parse(localStorage.getItem("userMovies"))
+        const pasteUserData = JSON.parse(localStorage.getItem("currentUser"))
+        setUserMovies(pasteUserMovies);
+        setCurrentUser(pasteUserData);
+        setLoggedIn(true)
+        setLoading(false)
+        history.push("/movies")
+        
+        
+      }
+      }
+      else {
+        setLoggedIn(false)
+        localStorage.removeItem('jwt')
+        PAGE_WITHOUT_AUTH.includes(path) ? history.push(path)  : history.push(MAIN_PAGE);
+      }
+      
+      
     }, [loggedIn]);
+
+    React.useEffect(()=> {
+      const patchBollean = `${history.location.pathname === '/saved-movies'|| history.location.pathname === '/movies'|| history.location.pathname === '/profile'}`;
+      history.push(patchBollean ? '' : '/error'); 
+    }, [])
 
     function filterShortMovies(arr) {
 
@@ -262,11 +302,14 @@ function App() {
     }, [checkSave]);
 
     function handleUpdateUser(data) {
+      setLoading(true)
       mainApi
         .editUserInfo(data)
         .then((editedData) => {
+          setLoading(false)
           setCurrentUser(editedData);
           setMessage("Данные профиля успешно обновлены");
+          localStorage.setItem("currentUser", JSON.stringify(editedData));
         })
         .catch((err) => {
           console.log(`Ошибка: ${err}`);
@@ -275,6 +318,7 @@ function App() {
           } else {
             setMessage("При изменении данных профиля произошла ошибка");
           }
+          localStorage.removeItem("currentUser")
         });
     }
 
@@ -282,6 +326,7 @@ function App() {
       localStorage.removeItem("jwt");
       localStorage.removeItem("movies")
       localStorage.removeItem("userMovies")
+      localStorage.removeItem("currentUser")
       setUserMovies([]);
       setSortedMovies([]);
       setCurrentUser({});
@@ -320,6 +365,7 @@ function App() {
           likedMovies={checkSavedMovie}
           message={moviesMessage}
           likemovie = {checkSavedMovie}
+          loading={loading}
         />
 
         <ProtectedRoute 
@@ -338,17 +384,20 @@ function App() {
           message={moviesMessage}
           delMovie={delMovie}
           likemovie = {checkSavedMovie}
+          loading={loading}
         />
         <Route path="/sign-up">
           <Register
           onRegister={handleRegist}
           message={message}
+          loading={loading}
           />
         </Route>
         <Route path="/sign-in">
           <Login
           onLogin={handleLogin}
           message={message}
+          loading={loading}
           />
         </Route>
 
@@ -360,11 +409,11 @@ function App() {
           message={message}
           loggedIn={loggedIn}
           onExit= {handleSignOut}
+          loading={loading}
         />
         <Route path="*">
           <NotFound />
         </Route>
-        <Redirect to="*" />
       </Switch>
       <PopupMovie isOpen={isBurgerPopupOpen} onClose= {closePopup}/>
       </CurrentUserContext.Provider>

@@ -147,7 +147,7 @@ function App() {
         if (!deletedMovie) {
           throw new Error("При удалении фильма произошла ошибка");
         } else {
-          const newMoviesList = userMovies.filter((c) => c.movieId !== id);
+          const newMoviesList = userMovies.filter((c) => c.movieId !=== id);
           setUserMovies(newMoviesList);
         }
       })
@@ -169,7 +169,7 @@ function App() {
     }, [loggedIn]);
 
     function filterShortMovies(arr) {
-      if (arr.length !== 0 || arr !== "undefind") {
+      if (arr.length !=== 0 || arr !=== "undefind") {
         return arr.filter((movie) =>
           shortMovies ? movie.duration <= 40 : true
         );

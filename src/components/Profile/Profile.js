@@ -61,9 +61,9 @@ function Profile(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
+    if(data.name !== '' && data.email !== '' && formValid !== false && data.name !== undefined && data.email !== undefined ){
       props.onProfile(data)
-    
+    }
 }
 
 React.useEffect(()=> {
@@ -86,13 +86,13 @@ React.useEffect(()=> {
         <form onSubmit={handleSubmit} className="profile__form">
         <div className="profile__container">
           <label htmlFor="name" className="profile__label">Имя</label>
-          <input id="name" type="text" onChange={handleChange} value={currentUser.name} name="name" className="profile__input" />
+          <input id="name" type="text" onChange={handleChange} defaultValue={currentUser.name} name="name" className="profile__input" />
         </div>
         <span id="name-error" className="profile__error" >{nameError}</span>
 
         <div className="profile__container">
         <label htmlFor="email" className="profile__label">Email</label>
-        <input id="email" type="text" onChange={handleChange} value={currentUser.email} name="email" className="profile__input" />
+        <input id="email" type="text" onChange={handleChange} defaultValue={currentUser.email} name="email" className="profile__input" />
     
 
         </div>
