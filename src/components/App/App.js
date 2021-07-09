@@ -34,9 +34,9 @@ function App() {
 
   const history = useHistory();
   let location = useLocation();
-
-  const MAIN_PAGE = '/'
-  const PAGE_WITHOUT_AUTH = ['/movies', '/saved-movies', '/profile']
+  const pathname = location.pathname;
+  const PAGE_WITH_AUTH = ['/movies', '/saved-movies', '/profile']
+  const PAGE_WITHOUT_AUTH = ['/sign-in', '/sign-up']
 
   const handleLogin = (email, password) => {
     setLoading(true)
@@ -47,7 +47,6 @@ function App() {
         setLoading(false)
         localStorage.setItem('jwt', data.token); 
         history.push('/movies'); 
-         return data; 
        }})
       .catch((err) => {
         setMessage("При авторизации произошла ошибка");
@@ -61,15 +60,38 @@ function App() {
       });
 }
 
+function checkToken() {
+  if (localStorage.getItem('jwt')) {
+    setLoggedIn(true);
+    const pathToRedirect = PAGE_WITH_AUTH.includes(pathname) ? pathname : (pathname === '/' ? pathname : (PAGE_WITHOUT_AUTH.includes(pathname) ? '/' : 'notFound'));
+    history.push(pathToRedirect);
+  }
+}
+
   const handleRegist = (name, email, password) => {
     setLoading(true)
     return auth.register(name, email, password)
     .then((res) => {
             setMessage('Вы успешно зарегистрировались!');
             setCurrentUser(res)
-            setLoading(false)
-            setLoggedIn(true)
-            history.push('/movies');
+            auth.authorize(email, password) 
+     .then((data) => { 
+       if (data.token){
+        setLoggedIn(true)
+        setLoading(false)
+        localStorage.setItem('jwt', data.token); 
+        history.push('/movies'); 
+       }})
+      .catch((err) => {
+        setMessage("При авторизации произошла ошибка");
+        if (err === 401) {
+          setMessage("Пользователь с таким email не найден");
+        }
+        if (err === 400) {
+          setMessage("Неверный email или пароль");
+        }
+        localStorage.removeItem("jwt");
+      });
  
       }
     )
@@ -178,10 +200,10 @@ function App() {
     },[userMovies])
 
     React.useEffect(() => {
-      const path = location.pathname;
+      
+      checkToken()
       const jwt = localStorage.getItem('jwt')
-      if(!jwt)
-      {
+      if(jwt){
         setLoading(true)
       const userMovie = localStorage.getItem("userMovies");
       const userData = localStorage.getItem("currentUser");
@@ -191,7 +213,6 @@ function App() {
             .then(([userData, savedMovies]) => {
               setLoggedIn(true)
               setLoading(false)
-              history.push("/movies")
               const itemMovie = savedMovies.filter((i) => i.owner === userData._id)
               setUserMovies(itemMovie);
               localStorage.setItem("currentUser", JSON.stringify(userData));
@@ -204,7 +225,7 @@ function App() {
               setLoggedIn(false)
               localStorage.removeItem("currentUser");
               localStorage.removeItem("userMovies")
-              PAGE_WITHOUT_AUTH.includes(path) ? history.push(path)  : history.push(MAIN_PAGE);
+
             });
         }
       }
@@ -215,24 +236,16 @@ function App() {
         setCurrentUser(pasteUserData);
         setLoggedIn(true)
         setLoading(false)
-        history.push("/movies")
-        
-        
       }
       }
       else {
         setLoggedIn(false)
         localStorage.removeItem('jwt')
-        PAGE_WITHOUT_AUTH.includes(path) ? history.push(path)  : history.push(MAIN_PAGE);
       }
       
       
     }, [loggedIn]);
 
-    React.useEffect(()=> {
-      const patchBollean = `${history.location.pathname === '/saved-movies'|| history.location.pathname === '/movies'|| history.location.pathname === '/profile'}`;
-      history.push(patchBollean ? '' : '/error'); 
-    }, [])
 
     function filterShortMovies(arr) {
 
@@ -411,7 +424,7 @@ function App() {
           onExit= {handleSignOut}
           loading={loading}
         />
-        <Route path="*">
+        <Route path="/*">
           <NotFound />
         </Route>
       </Switch>
