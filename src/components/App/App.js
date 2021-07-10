@@ -22,8 +22,11 @@ function App() {
   const [userMovies, setUserMovies] = React.useState([]);
   const [shortMovies, setShortMovies] = useState(false);
   const [sortedMovies, setSortedMovies] = useState([]);
+  const [sortedUserMovies, setSortedUserMovies] = useState([]);
   const [message, setMessage] = useState("");
   const [checkMovies, setCheckMovies] = useState([]);
+  const [checkUserMovies, setCheckUserMovies] = useState([]);
+  
   const [moviesMessage, setMoviesMessage] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [checkSave, setCheckSave] = useState(false);
@@ -280,14 +283,14 @@ function checkToken() {
         setMoviesMessage("Ничего не найдено");
       } else {
         setMoviesMessage("");
-        setUserMovies(findedMovies);
+        setSortedUserMovies(findedMovies);
         setFeachFilm(prev => ([...prev, findedMovies]))
         localStorage.setItem("sortedMoviesUser", JSON.stringify(feachFilm));
       }}
       else {
         const filterMoviesUser = JSON.parse(localStorage.getItem("sortedMoviesUser"))
         const findMovie = filterMoviesUser.filter((i) => i.nameRU === keyword)
-        setUserMovies(findMovie)
+        setSortedUserMovies(findMovie)
       }
     }
 
@@ -325,6 +328,15 @@ function checkToken() {
         
       
     }
+
+    React.useEffect(() => {
+      if(sortedUserMovies.length === 0){
+        setCheckUserMovies(userMovies)
+      }
+      else{
+        setCheckUserMovies(sortedUserMovies)
+      }
+    }, [userMovies, sortedUserMovies])
 
     React.useEffect(() => {
       if(sortedMovies.length === 0){
@@ -423,7 +435,7 @@ function checkToken() {
           loggedIn={loggedIn}
           isSavedMovies ={true}
           isShortMovie={shortMovies}
-          userMovies={filterShortMovies(userMovies)}
+          userMovies={filterShortMovies(checkUserMovies)}
           onFilter={handleCheckBox}
           onDeleteMovieCard={delMovie}
           onGetMovies={handleGetSavedMovies}
