@@ -284,8 +284,11 @@ function checkToken() {
       } else {
         setMoviesMessage("");
         setSortedUserMovies(findedMovies);
-        setFeachFilm(prev => ([...prev, findedMovies]))
-        localStorage.setItem("sortedMoviesUser", JSON.stringify(feachFilm));
+        
+        findedMovies.map((i)=> {
+          setFeachFilm(prev => ([...prev, i]))
+          localStorage.setItem("sortedMoviesUser", JSON.stringify(feachFilm))
+        })
       }}
       else {
         const filterMoviesUser = JSON.parse(localStorage.getItem("sortedMoviesUser"))
