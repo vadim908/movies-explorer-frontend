@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import FirstPage from '../FirstPage/Firstpage';
 import moviesApi from "../../utils/MoviesApi";
@@ -29,6 +28,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [checkSave, setCheckSave] = useState(false);
   const [loading, setLoading] = useState(false)
+  const [feachFilm, setFeachFilm] = useState([])
 
   const baseUrl = `https://api.nomoreparties.co`;
 
@@ -45,7 +45,9 @@ function App() {
        if (data.token){
         setLoggedIn(true)
         setLoading(false)
-        localStorage.setItem('jwt', data.token); 
+        localStorage.setItem('jwt', data.token);
+        localStorage.setItem("sortedMovies", JSON.stringify(feachFilm))
+        localStorage.setItem("sortedMoviesUser", JSON.stringify(feachFilm));
         history.push('/movies'); 
        }})
       .catch((err) => {
@@ -79,7 +81,9 @@ function checkToken() {
        if (data.token){
         setLoggedIn(true)
         setLoading(false)
-        localStorage.setItem('jwt', data.token); 
+        localStorage.setItem('jwt', data.token);
+        localStorage.setItem("sortedMovies", JSON.stringify(feachFilm))
+        localStorage.setItem("sortedMoviesUser", JSON.stringify(feachFilm));
         history.push('/movies'); 
        }})
       .catch((err) => {
@@ -109,6 +113,7 @@ function checkToken() {
       setLoading(true)
       const saveMovieJWT = localStorage.getItem("movies");
       if(!saveMovieJWT){
+        console.log('ААААА')
         return moviesApi.getMoviesData()
       .then((data) => {
         const allMovies = data.map(({
@@ -209,6 +214,7 @@ function checkToken() {
       const userData = localStorage.getItem("currentUser");
       if(!userMovie && !userData){
         if(loggedIn === true){
+          console.log('dsdsds')
           Promise.all([mainApi.getUserData(localStorage.getItem('jwt')), mainApi.getUserMovies(localStorage.getItem('jwt'))])
             .then(([userData, savedMovies]) => {
               setLoggedIn(true)
@@ -261,7 +267,11 @@ function checkToken() {
     }
 
     function handleGetSavedMovies(keyword) {
-      setMoviesMessage("");
+
+      const checkUserFilterMovies =  JSON.parse(localStorage.getItem("sortedMoviesUser"))
+      const filter = checkUserFilterMovies.filter((i) => i.nameRU === keyword)
+      if(filter.length === 0){
+        setMoviesMessage("");
       const key = new RegExp(keyword, "gi");
       const findedMovies = userMovies.filter(
         (item) => key.test(item.nameRU) || key.test(item.nameEN)
@@ -271,27 +281,49 @@ function checkToken() {
       } else {
         setMoviesMessage("");
         setUserMovies(findedMovies);
+        setFeachFilm(prev => ([...prev, findedMovies]))
+        localStorage.setItem("sortedMoviesUser", JSON.stringify(feachFilm));
+      }}
+      else {
+        const filterMoviesUser = JSON.parse(localStorage.getItem("sortedMoviesUser"))
+        const findMovie = filterMoviesUser.filter((i) => i.nameRU === keyword)
+        setUserMovies(findMovie)
       }
     }
 
     function handleGetMovies(keyword) {
-      setMoviesMessage("");
-      const key = new RegExp(keyword, "gi");
-      const findedMovies = movies.filter(
-        (item) => key.test(item.nameRU) || key.test(item.nameEN)
-      );
-      if (findedMovies.length === 0) {
-        setMoviesMessage("Ничего не найдено");
-      } else {
-        setMoviesMessage("");
-        const checkedLikes = findedMovies.map((movie) => {
-          movie.isSaved = userMovies.some(
-            (userMovie) => userMovie.movieId === movie.id
-          );
-          return movie;
-        });
-        setSortedMovies(checkedLikes);
-      }
+      const checkFilterMovies = JSON.parse(localStorage.getItem("sortedMovies"));
+      const filter = checkFilterMovies.filter((i) => i.nameRU === keyword)
+        if(filter.length === 0){
+          setMoviesMessage("");
+        const key = new RegExp(keyword, "gi");
+        const findedMovies = movies.filter(
+          (item) => key.test(item.nameRU) || key.test(item.nameEN)
+        );
+        if (findedMovies.length === 0) {
+          setMoviesMessage("Ничего не найдено");
+        } else {
+          setMoviesMessage("");
+          const checkedLikes = findedMovies.map((movie) => {
+            movie.isSaved = userMovies.some(
+              (userMovie) => userMovie.movieId === movie.id
+            );
+            return movie;
+          });
+          setSortedMovies(checkedLikes);
+          checkedLikes.map((i)=> {
+            setFeachFilm(prev => ([...prev, i]))
+            localStorage.setItem("sortedMovies", JSON.stringify(feachFilm))
+          })
+        }
+        }
+        else {
+          const filterMovies = JSON.parse(localStorage.getItem("sortedMovies"))
+          const findMovie = filterMovies.filter((i) => i.nameRU === keyword)
+          setSortedMovies(findMovie)
+        }
+        
+      
     }
 
     React.useEffect(() => {
@@ -340,6 +372,7 @@ function checkToken() {
       localStorage.removeItem("movies")
       localStorage.removeItem("userMovies")
       localStorage.removeItem("currentUser")
+      localStorage.removeItem("sortedMovies")
       setUserMovies([]);
       setSortedMovies([]);
       setCurrentUser({});
@@ -435,4 +468,3 @@ function checkToken() {
 }
 
 export default App;
-
