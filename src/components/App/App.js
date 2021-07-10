@@ -116,7 +116,6 @@ function checkToken() {
       setLoading(true)
       const saveMovieJWT = localStorage.getItem("movies");
       if(!saveMovieJWT){
-        console.log('ААААА')
         return moviesApi.getMoviesData()
       .then((data) => {
         const allMovies = data.map(({
@@ -217,7 +216,6 @@ function checkToken() {
       const userData = localStorage.getItem("currentUser");
       if(!userMovie && !userData){
         if(loggedIn === true){
-          console.log('dsdsds')
           Promise.all([mainApi.getUserData(localStorage.getItem('jwt')), mainApi.getUserMovies(localStorage.getItem('jwt'))])
             .then(([userData, savedMovies]) => {
               setLoggedIn(true)
