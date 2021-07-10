@@ -49,8 +49,6 @@ function App() {
         setLoggedIn(true)
         setLoading(false)
         localStorage.setItem('jwt', data.token);
-        localStorage.setItem("sortedMovies", JSON.stringify(feachFilm))
-        localStorage.setItem("sortedMoviesUser", JSON.stringify(feachFilm));
         history.push('/movies'); 
        }})
       .catch((err) => {
