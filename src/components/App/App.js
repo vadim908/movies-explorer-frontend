@@ -214,7 +214,7 @@ function checkToken() {
         setLoading(true)
       const userMovie = localStorage.getItem("userMovies");
       const userData = localStorage.getItem("currentUser");
-      if(!userMovie && !userData || userMovie === null){
+      if(!userMovie && !userData || userMovie === null || userData === null){
         if(loggedIn === true){
           Promise.all([mainApi.getUserData(localStorage.getItem('jwt')), mainApi.getUserMovies(localStorage.getItem('jwt'))])
             .then(([userData, savedMovies]) => {
