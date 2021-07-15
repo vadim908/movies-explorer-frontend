@@ -1,0 +1,18 @@
+.savedMovies {
+    background-color: white;
+}
+
+.savedMovies__container {
+    width: 100%;
+    min-height: 140px;
+}
+
+.savedMovies-message {
+    font-family: "Inter",Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 34px;
+    color: #A0A0A0;
+    text-align: center;
+}

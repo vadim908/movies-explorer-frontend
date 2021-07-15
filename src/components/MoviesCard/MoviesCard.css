@@ -1,0 +1,131 @@
+.moviesCard {
+    background-color:#F9F9F9;
+    width: calc(100% - 140px);
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+
+.moviesCard__delete {
+    background-image: url('../../image/d5.svg');
+    background-repeat: no-repeat;
+    width: 14px;
+    height: 12px;
+    margin-left: 22px;
+}
+
+.moviesCard__like {
+    width: 14px;
+    height: 12px;
+    margin-left: 22px;
+    background-image: url('../../image/save5d.svg');
+    background-repeat: no-repeat;
+    
+}
+
+.moviesCard__like_active {
+    background-image: url('../../image/save5.svg');
+    background-repeat: no-repeat;
+}
+
+.moviesCard__container {
+    display: flex;
+    flex-direction: column;
+}
+
+.moviesCard__name {
+    font-family: "Inter",Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+    color: black;
+    padding-left: 22px;
+    padding-top: 22px;
+    padding-bottom: 13px;
+}
+
+.moviesCard__time {
+    font-family: "Inter",Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 11px;
+    line-height: 13px;
+    display: flex;
+    align-items: center;
+    padding-left: 22px;
+    padding-bottom: 33px;
+}
+
+.moviesCard__like {
+    width: 14px;
+    height: 12px;
+    padding-left: 22px;
+}
+
+.moviesCard__img {
+    width: 220px;
+    height: 122px;
+    padding: 6px;
+}
+
+
+@media screen and (min-width: 320px) and (max-width: 767px){
+    
+    .moviesCard {
+        width: calc(100% - 20px);
+        max-width: 300px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(2, minmax(min-content, max-content));
+    }
+
+    .moviesCard__img {
+        grid-row: 1;
+        grid-column: 1/-1;
+        width: 300px;
+        height: 168px;
+        padding: 0;
+    }
+
+    .moviesCard__name {
+        font-size: 12px;
+        line-height: 15px;
+        padding-left: 12px;
+        padding-top: 14px;
+        padding-bottom: 8px;
+    }
+
+    .moviesCard__time {
+        padding-left: 12px;
+        padding-bottom: 14px;
+        grid-row: 2;
+    }
+
+    .moviesCard__like {
+        grid-column: 2;
+        padding-left: 0;
+        padding-right: 16px;
+        justify-self: end;
+        align-self: center;
+    }
+
+    .moviesCard__container {
+        grid-column: 1/-1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px){
+    
+    .moviesCard {
+        width: calc(100% - 60px);
+        margin-top: 60px;
+    }
+
+    .moviesCard__time {
+        padding-bottom: 30px;
+    }
+}

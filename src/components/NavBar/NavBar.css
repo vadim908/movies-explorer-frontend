@@ -1,0 +1,31 @@
+.navBar {
+    background-color: #F5F5F5;
+    display: flex;
+    width: 100%;
+    min-height: 66px;
+}
+
+.navBar__links{
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.navBar__link {
+    color: black;
+    font-family: "Inter",Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+}
+
+.navBar__link:hover{
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.navBar__link:nth-child(2) {
+    margin-right: 40px;
+    margin-left: 40px;
+}
